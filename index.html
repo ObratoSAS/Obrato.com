@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Obrato - Servicios Integrales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-primario: #1b5f3c;
+      --color-secundario: #f5a623;
+      --color-acento: #0f9d58;
+      --color-oscuro: #0d1f1a;
+      --color-claro: #f3f7f4;
+      --max-width: 1100px;
+      --transition: all 0.4s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--color-oscuro);
+      background: linear-gradient(180deg, #f7fff9 0%, #f0f5ff 45%, #ffffff 100%);
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid rgba(27, 95, 60, 0.15);
+    }
+
+    .navbar {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: var(--color-primario);
+    }
+
+    .logo span {
+      display: inline-flex;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.05rem;
+      background: linear-gradient(140deg, var(--color-primario), var(--color-acento));
+      color: #fff;
+      box-shadow: 0 10px 25px rgba(15, 157, 88, 0.25);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #1a2a2a;
+      font-weight: 500;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.4rem;
+      width: 0;
+      height: 2px;
+      background: var(--color-secundario);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after,
+    nav a:focus::after {
+      width: 100%;
+    }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--color-primario);
+    }
+
+    .hero {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 6rem 1.5rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.3rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      color: var(--color-oscuro);
+    }
+
+    .hero-content h1 span {
+      color: var(--color-primario);
+      display: inline-block;
+      background: linear-gradient(120deg, rgba(27, 95, 60, 0.95), rgba(15, 157, 88, 0.95));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-content p {
+      margin: 1.2rem 0 1.8rem;
+      font-size: 1.05rem;
+      color: #516465;
+      max-width: 520px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.9rem 1.8rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: var(--transition);
+      box-shadow: 0 18px 30px rgba(27, 95, 60, 0.18);
+    }
+
+    .btn-primario {
+      background: linear-gradient(140deg, var(--color-primario), var(--color-acento));
+      color: #fff;
+    }
+
+    .btn-primario:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 35px rgba(15, 157, 88, 0.3);
+    }
+
+    .btn-secundario {
+      background: rgba(27, 95, 60, 0.08);
+      color: var(--color-primario);
+      border: 1px solid rgba(27, 95, 60, 0.25);
+    }
+
+    .btn-secundario:hover {
+      background: rgba(27, 95, 60, 0.15);
+    }
+
+    .hero-media {
+      position: relative;
+    }
+
+    .hero-card {
+      background: #fff;
+      border-radius: 26px;
+      padding: 2rem;
+      box-shadow: 0 25px 50px rgba(12, 39, 24, 0.18);
+      display: grid;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -20% 40% 40% -20%;
+      background: radial-gradient(circle at top right, rgba(245, 166, 35, 0.4), transparent 55%);
+      pointer-events: none;
+    }
+
+    .hero-card h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--color-primario);
+    }
+
+    .hero-card .status {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .status-card {
+      background: linear-gradient(135deg, rgba(15, 157, 88, 0.12), rgba(27, 95, 60, 0.08));
+      border-radius: 18px;
+      padding: 1.1rem;
+      display: grid;
+      gap: 0.4rem;
+      border: 1px solid rgba(15, 157, 88, 0.12);
+    }
+
+    .status-card span:first-child {
+      font-size: 0.9rem;
+      color: #5f7b75;
+    }
+
+    .status-card span:last-child {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--color-oscuro);
+    }
+
+    .badges {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 0.5rem 0.9rem;
+      background: rgba(245, 166, 35, 0.16);
+      color: #a66a05;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 4.5rem 1.5rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      color: var(--color-oscuro);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title p {
+      color: #607371;
+      max-width: 620px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .service-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 2rem 1.7rem;
+      box-shadow: 0 18px 40px rgba(27, 95, 60, 0.12);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(15, 157, 88, 0.1), transparent 65%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 28px 45px rgba(15, 157, 88, 0.2);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: rgba(27, 95, 60, 0.1);
+      display: grid;
+      place-items: center;
+      font-size: 1.6rem;
+      color: var(--color-primario);
+      margin-bottom: 1.3rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.6rem;
+      color: var(--color-oscuro);
+    }
+
+    .service-card p {
+      color: #627571;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .tabs-container {
+      margin-top: 3rem;
+      background: #fff;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 18px 35px rgba(27, 95, 60, 0.12);
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .tab {
+      padding: 0.7rem 1.4rem;
+      border-radius: 999px;
+      border: 1px solid rgba(27, 95, 60, 0.25);
+      background: rgba(27, 95, 60, 0.08);
+      cursor: pointer;
+      color: var(--color-primario);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .tab.active {
+      background: linear-gradient(140deg, var(--color-primario), var(--color-acento));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 20px 30px rgba(15, 157, 88, 0.25);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .tab-content.active {
+      display: grid;
+    }
+
+    .tab-content ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .tab-content li {
+      background: rgba(27, 95, 60, 0.06);
+      padding: 1.2rem;
+      border-radius: 18px;
+      color: #2c4642;
+      font-weight: 500;
+      line-height: 1.5;
+      position: relative;
+      padding-left: 2.8rem;
+    }
+
+    .tab-content li::before {
+      content: '✔';
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: var(--color-acento);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.8rem;
+      margin-top: 4rem;
+    }
+
+    .metric-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 20px 35px rgba(27, 95, 60, 0.1);
+      text-align: center;
+      transform: translateY(30px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .metric-card.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .metric-card span {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-primario);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .metric-card p {
+      color: #4f6462;
+    }
+
+    .timeline {
+      background: #0f1f1b;
+      color: #fff;
+      border-radius: 36px;
+      padding: 4rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      inset: -20% -40% 20% 50%;
+      background: radial-gradient(circle at top left, rgba(245, 166, 35, 0.3), transparent 60%);
+      pointer-events: none;
+    }
+
+    .timeline h2 {
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      margin-bottom: 2.5rem;
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+    }
+
+    .timeline-step {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .timeline-step span {
+      display: inline-flex;
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: rgba(245, 166, 35, 0.2);
+      color: var(--color-secundario);
+      font-weight: 700;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .timeline-step h3 {
+      margin-bottom: 0.7rem;
+      font-size: 1.2rem;
+    }
+
+    .timeline-step p {
+      color: #cfded7;
+      line-height: 1.6;
+    }
+
+    .timeline-step:hover {
+      transform: translateY(-8px);
+      background: rgba(245, 166, 35, 0.22);
+      color: #0f1f1b;
+    }
+
+    .timeline-step:hover p {
+      color: #24463f;
+    }
+
+    .testimonials {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .testimonial {
+      background: #fff;
+      border-radius: 22px;
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(15, 157, 88, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonial::before {
+      content: '"';
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 4rem;
+      color: rgba(15, 157, 88, 0.1);
+      font-family: serif;
+    }
+
+    .testimonial p {
+      color: #4b5f5c;
+      line-height: 1.7;
+      margin-bottom: 1.4rem;
+    }
+
+    .testimonial strong {
+      color: var(--color-primario);
+    }
+
+    .cta {
+      background: linear-gradient(120deg, var(--color-primario), var(--color-acento));
+      color: #fff;
+      border-radius: 32px;
+      padding: 4rem 3rem;
+      text-align: center;
+      box-shadow: 0 30px 60px rgba(15, 157, 88, 0.25);
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 3vw, 2.7rem);
+      margin-bottom: 1rem;
+    }
+
+    .cta p {
+      margin-bottom: 2rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .cta .btn {
+      box-shadow: none;
+    }
+
+    .contacto {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .contact-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 18px 35px rgba(27, 95, 60, 0.12);
+    }
+
+    .contact-card h3 {
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .contact-card ul {
+      list-style: none;
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .contact-card li span {
+      font-weight: 600;
+      color: var(--color-primario);
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    input,
+    textarea {
+      border-radius: 16px;
+      border: 1px solid rgba(27, 95, 60, 0.15);
+      padding: 0.9rem 1rem;
+      font-family: inherit;
+      background: rgba(255, 255, 255, 0.9);
+      transition: border 0.3s ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--color-primario);
+      box-shadow: 0 0 0 3px rgba(15, 157, 88, 0.1);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 1.5rem 3rem;
+      color: #5f6f6a;
+      font-size: 0.95rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-section {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 860px) {
+      nav ul {
+        position: absolute;
+        top: 72px;
+        right: 1.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 20px 40px rgba(27, 95, 60, 0.2);
+        border-radius: 18px;
+        padding: 1.2rem;
+        flex-direction: column;
+        gap: 1rem;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-10px);
+        transition: var(--transition);
+      }
+
+      nav ul.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      .mobile-toggle {
+        display: block;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        padding-top: 5rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .tabs-container {
+        padding: 1.5rem;
+      }
+
+      .timeline {
+        padding: 3rem 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a class="logo" href="#inicio"><span>Ob</span>Obrato Servicios</a>
+      <button class="mobile-toggle" aria-label="Abrir menú" id="menuToggle">☰</button>
+      <nav>
+        <ul id="navLinks">
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#diferenciales">¿Por qué elegirnos?</a></li>
+          <li><a href="#metodo">Método</a></li>
+          <li><a href="#testimonios">Testimonios</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-content fade-section">
+        <h1>Soluciones <span>integrales</span> para tus espacios residenciales y corporativos</h1>
+        <p>
+          Somos tu aliado estratégico para transformar, mantener y embellecer entornos.
+          Cuadrillas especializadas en locativas, jardinería, ornamentación y personal de servicios que responden con calidad y rapidez.
+        </p>
+        <div class="hero-buttons">
+          <button class="btn btn-primario" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'});">Solicita una cotización</button>
+          <button class="btn btn-secundario" onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'});">Conoce nuestro portafolio</button>
+        </div>
+      </div>
+      <div class="hero-media fade-section">
+        <div class="hero-card">
+          <h3>Equipo listo para actuar</h3>
+          <div class="status">
+            <div class="status-card">
+              <span>Cuadrillas activas</span>
+              <span id="cuadrillasActivas">0</span>
+            </div>
+            <div class="status-card">
+              <span>Clientes felices</span>
+              <span id="clientesFelices">0</span>
+            </div>
+          </div>
+          <div class="badges">
+            <span class="badge">Respuesta en menos de 24 horas</span>
+            <span class="badge">Cobertura en toda la ciudad</span>
+            <span class="badge">Supervisión certificada</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicios" class="fade-section">
+      <div class="section-title">
+        <h2>Servicios creados para cada necesidad</h2>
+        <p>
+          Diseñamos soluciones flexibles con personal entrenado para responder a proyectos puntuales o a contratos de mantenimiento continuo.
+        </p>
+      </div>
+      <div class="services-grid">
+        <article class="service-card">
+          <div class="service-icon">🏠</div>
+          <h3>Toderos expertos</h3>
+          <p>Profesionales multitarea que resuelven arreglos, reparaciones menores y ajustes de mantenimiento en hogares, oficinas y edificios.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">🌿</div>
+          <h3>Jardineros residenciales</h3>
+          <p>Cuidado integral de jardines con podas, fertilización, riego, control de plagas y diseño para conservar espacios verdes vibrantes.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">👷</div>
+          <h3>Cuadrillas de jardinería</h3>
+          <p>Equipos coordinados para proyectos de gran escala, urbanizaciones, centros empresariales y parques con planificación detallada.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">🧹</div>
+          <h3>Personal de servicios</h3>
+          <p>Auxiliares de limpieza, conserjería y logística que operan bajo protocolos de bioseguridad y estándares de hospitalidad.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">🛠️</div>
+          <h3>Locativas y mantenimientos</h3>
+          <p>Intervenciones técnicas en infraestructura, pintura, electricidad, plomería y remodelaciones ligeras con seguimiento permanente.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon">🌺</div>
+          <h3>Ornamentación y paisajismo</h3>
+          <p>Decoración vegetal, muros verdes, jardineras internas y ambientaciones temporales para eventos corporativos o residenciales.</p>
+        </article>
+      </div>
+
+      <div class="tabs-container">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="corporativo" role="tab" aria-selected="true">Corporativo</button>
+          <button class="tab" data-tab="residencial" role="tab" aria-selected="false">Residencial</button>
+          <button class="tab" data-tab="eventos" role="tab" aria-selected="false">Eventos</button>
+        </div>
+        <div class="tab-content active" id="corporativo" role="tabpanel">
+          <ul>
+            <li>Planes de mantenimiento y locativas con supervisión técnica permanente.</li>
+            <li>Gestión integral de zonas verdes, cubiertas y fachadas vivas.</li>
+            <li>Suministro y administración de personal operativo y de respaldo.</li>
+            <li>Reportes digitales y trazabilidad en cada intervención.</li>
+          </ul>
+        </div>
+        <div class="tab-content" id="residencial" role="tabpanel">
+          <ul>
+            <li>Paquetes de jardinería y ornamentación adaptados a tu hogar.</li>
+            <li>Soporte rápido para reparaciones y mejoras estéticas.</li>
+            <li>Asesoría personalizada en selección de plantas y diseño interior.</li>
+            <li>Programas de mantenimiento preventivo para piscinas y terrazas.</li>
+          </ul>
+        </div>
+        <div class="tab-content" id="eventos" role="tabpanel">
+          <ul>
+            <li>Decoraciones temporales con identidad de marca y logística integrada.</li>
+            <li>Montaje y desmontaje express con equipos certificados.</li>
+            <li>Escenografías botánicas, muros verdes y ambientaciones temáticas.</li>
+            <li>Coordinación con proveedores y producción general del espacio.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric-card" data-target="24" data-sufijo="/7">
+          <span>0</span>
+          <p>Disponibilidad operativa</p>
+        </div>
+        <div class="metric-card" data-target="180" data-sufijo="+">
+          <span>0</span>
+          <p>Proyectos ejecutados en el último año</p>
+        </div>
+        <div class="metric-card" data-target="96" data-sufijo="%">
+          <span>0</span>
+          <p>Satisfacción promedio de los clientes</p>
+        </div>
+        <div class="metric-card" data-target="12" data-sufijo=" ciudades">
+          <span>0</span>
+          <p>Cobertura nacional</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="diferenciales" class="fade-section">
+      <div class="section-title">
+        <h2>La experiencia Obrato</h2>
+        <p>
+          Integramos tecnología, talento humano y sostenibilidad para entregar resultados medibles en cada intervención.
+        </p>
+      </div>
+      <div class="testimonials">
+        <article class="testimonial">
+          <p>“Su equipo de toderos atiende nuestras sedes desde hace dos años. Tenemos reportes en línea, respuesta oportuna y una coordinación impecable.”</p>
+          <strong>Laura Méndez · Directora Administrativa</strong>
+        </article>
+        <article class="testimonial">
+          <p>“Transformaron las zonas verdes del complejo en tiempo récord. La cuadrilla entiende perfectamente nuestro estilo y mantiene los estándares.”</p>
+          <strong>Ricardo Valdés · Gerente de Operaciones</strong>
+        </article>
+        <article class="testimonial">
+          <p>“La propuesta de ornamentación para nuestros eventos corporativos siempre sorprende. Nos ayudan a crear experiencias memorables para los asistentes.”</p>
+          <strong>María Pardo · Líder de Mercadeo</strong>
+        </article>
+      </div>
+    </section>
+
+    <section id="metodo" class="fade-section">
+      <div class="timeline">
+        <h2>¿Cómo trabajamos?</h2>
+        <div class="timeline-grid">
+          <div class="timeline-step">
+            <span>1</span>
+            <h3>Diagnóstico personalizado</h3>
+            <p>Visitamos el espacio, evaluamos necesidades y creamos un plan a la medida con un cronograma transparente.</p>
+          </div>
+          <div class="timeline-step">
+            <span>2</span>
+            <h3>Asignación del equipo</h3>
+            <p>Seleccionamos especialistas certificados y coordinamos todos los insumos para iniciar sin demoras.</p>
+          </div>
+          <div class="timeline-step">
+            <span>3</span>
+            <h3>Ejecución y seguimiento</h3>
+            <p>Implementamos protocolos de calidad, seguridad y sostenibilidad, con reportes en tiempo real.</p>
+          </div>
+          <div class="timeline-step">
+            <span>4</span>
+            <h3>Evaluación y mejora continua</h3>
+            <p>Medimos resultados, recogemos tu retroalimentación y ajustamos el plan para garantizar impacto duradero.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonios" class="fade-section">
+      <div class="section-title">
+        <h2>Historias que inspiran confianza</h2>
+        <p>Cada proyecto nos motiva a superar expectativas. Estos son algunos de los logros alcanzados junto a nuestros aliados.</p>
+      </div>
+      <div class="testimonials">
+        <article class="testimonial">
+          <p>“Con Obrato conseguimos uniformidad en todas las sedes. El personal de servicios opera bajo protocolos claros y siempre encontramos apoyo adicional.”</p>
+          <strong>Felipe González · Coordinador Facilities</strong>
+        </article>
+        <article class="testimonial">
+          <p>“La cuadrilla de jardinería rediseñó el parque central del conjunto. Los vecinos están felices con el nuevo paisajismo.”</p>
+          <strong>Carolina Rivas · Administradora de Propiedad Horizontal</strong>
+        </article>
+        <article class="testimonial">
+          <p>“En nuestros eventos contamos con un equipo integral que entiende la urgencia y cuida cada detalle de la ornamentación.”</p>
+          <strong>Juliana Ortiz · Productora de Eventos</strong>
+        </article>
+      </div>
+    </section>
+
+    <section id="contacto" class="fade-section">
+      <div class="cta">
+        <h2>Diseñemos juntos la solución perfecta</h2>
+        <p>Cuéntanos qué necesitas y agenda una visita técnica sin costo. Estamos listos para activar el equipo adecuado.</p>
+        <button class="btn btn-secundario" onclick="window.open('tel:+573001112233');">Llámanos ahora</button>
+      </div>
+
+      <div class="contacto">
+        <div class="contact-card">
+          <h3>Información directa</h3>
+          <ul>
+            <li><span>Teléfono:</span> +57 300 111 2233</li>
+            <li><span>Email:</span> contacto@obrato.com</li>
+            <li><span>Horario:</span> Lunes a sábado · 7:00 a.m. - 6:00 p.m.</li>
+            <li><span>Ubicación:</span> Calle 123 #45-67 · Bogotá D.C.</li>
+          </ul>
+        </div>
+        <div class="contact-card">
+          <h3>Escríbenos</h3>
+          <form id="contactForm">
+            <input type="text" name="nombre" placeholder="Nombre completo" required />
+            <input type="email" name="correo" placeholder="Correo electrónico" required />
+            <input type="tel" name="telefono" placeholder="Teléfono o WhatsApp" />
+            <textarea name="mensaje" placeholder="Cuéntanos sobre tu proyecto" required></textarea>
+            <button class="btn btn-primario" type="submit">Enviar mensaje</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Obrato Servicios Integrales · Transformamos espacios con talento y dedicación.
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            if (entry.target.classList.contains('metric-card')) {
+              animarContador(entry.target);
+            }
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    document.querySelectorAll('.fade-section, .metric-card').forEach((el) => observer.observe(el));
+
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach((link) =>
+      link.addEventListener('click', () => navLinks.classList.remove('open'))
+    );
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const metrics = document.querySelectorAll('.metric-card span');
+
+    function animarContador(card) {
+      const span = card.querySelector('span');
+      const target = parseInt(card.dataset.target, 10);
+      const sufijo = card.dataset.sufijo || '';
+      let contador = 0;
+      const incremento = Math.max(1, Math.floor(target / 60));
+
+      const interval = setInterval(() => {
+        contador += incremento;
+        if (contador >= target) {
+          contador = target;
+          clearInterval(interval);
+        }
+        span.textContent = contador + sufijo;
+      }, 30);
+    }
+
+    const heroCounters = [
+      { id: 'cuadrillasActivas', valor: 12 },
+      { id: 'clientesFelices', valor: 350 }
+    ];
+
+    heroCounters.forEach((item) => {
+      const elemento = document.getElementById(item.id);
+      let contador = 0;
+      const incremento = Math.max(1, Math.floor(item.valor / 80));
+      const interval = setInterval(() => {
+        contador += incremento;
+        if (contador >= item.valor) {
+          contador = item.valor;
+          clearInterval(interval);
+        }
+        elemento.textContent = contador;
+      }, 25);
+    });
+
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((btn) => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        tabContents.forEach((content) => content.classList.remove('active'));
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.getElementById('contactForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const form = event.target;
+      const datos = new FormData(form);
+      const mensaje = `Gracias ${datos.get('nombre')}, hemos recibido tu solicitud. En breve te contactaremos al ${datos.get('telefono') || 'número suministrado'}.`;
+      alert(mensaje);
+      form.reset();
+    });
+  </script>
+</body>
+</html>
