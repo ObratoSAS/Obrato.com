@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Booknest</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #7f00ff, #56ccf2);
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      font-style: italic;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .seccion {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(6px);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .seccion h2 {
+      border-bottom: 2px solid rgba(255,255,255,0.3);
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      font-size: 1.6rem;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    input, select {
+      background: rgba(255,255,255,0.8);
+      color: #333;
+    }
+
+    button {
+      background: #7f00ff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #4b0082;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      color: #333;
+    }
+
+    th {
+      background: #7f00ff;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(127,0,255,0.05);
+    }
+
+    .venta { color: green; font-weight: bold; }
+    .prestamo { color: blue; font-weight: bold; }
+    .disponible { color: black; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1> Booknest</h1>
+  </header>
+
+  <div class="container">
+    <!-- Login -->
+    <div class="seccion" id="loginSeccion">
+      <h2>Iniciar Sesión</h2>
+      <label>Email:</label>
+      <input type="email" id="email">
+      <label>Contraseña:</label>
+      <input type="password" id="password">
+      <button onclick="login()">Ingresar</button>
+    </div>
+
+    <!-- Panel Admin -->
+    <div id="adminPanel" style="display:none;">
+      <div class="seccion">
+        <h2>Registrar Libro</h2>
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo">
+        <label for="autor">Autor:</label>
+        <input type="text" id="autor">
+        <label for="estado">Estado:</label>
+        <select id="estado">
+          <option value="disponible">Disponible</option>
+          <option value="venta">En venta</option>
+          <option value="prestamo">En préstamo</option>
+        </select>
+        <button onclick="agregarLibro()">Agregar Libro</button>
+      </div>
+
+      <div class="seccion">
+        <h2>Lista de Libros (Todos)</h2>
+        <table id="tablaLibrosAdmin">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Panel Cliente -->
+    <div id="clientePanel" style="display:none;">
+      <div class="seccion">
+        <h2>Libros Disponibles</h2>
+        <table id="tablaLibrosCliente">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let libros = JSON.parse(localStorage.getItem("libros")) || [];
+    const adminUser = { email: "admin@booknest.com", password: "1234" };
+
+    function login() {
+      let email = document.getElementById("email").value;
+      let password = document.getElementById("password").value;
+
+      if (email === adminUser.email && password === adminUser.password) {
+        document.getElementById("loginSeccion").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        mostrarLibrosAdmin();
+      } else {
+        document.getElementById("loginSeccion").style.display = "none";
+        document.getElementById("clientePanel").style.display = "block";
+        mostrarLibrosCliente();
+      }
+    }
+
+    function guardarLibros() {
+      localStorage.setItem("libros", JSON.stringify(libros));
+    }
+
+    function agregarLibro() {
+      let titulo = document.getElementById("titulo").value;
+      let autor = document.getElementById("autor").value;
+      let estado = document.getElementById("estado").value;
+
+      if (!titulo || !autor) {
+        alert("Completa todos los campos.");
+        return;
+      }
+
+      let libro = { titulo, autor, estado };
+      libros.push(libro);
+      guardarLibros();
+      mostrarLibrosAdmin();
+
+      document.getElementById("titulo").value = "";
+      document.getElementById("autor").value = "";
+      document.getElementById("estado").value = "disponible";
+    }
+
+    function mostrarLibrosAdmin() {
+      let tbody = document.querySelector("#tablaLibrosAdmin tbody");
+      tbody.innerHTML = "";
+      libros.forEach((libro, index) => {
+        let fila = `
+          <tr>
+            <td>${libro.titulo}</td>
+            <td>${libro.autor}</td>
+            <td class="${libro.estado}">${libro.estado}</td>
+            <td><button onclick="eliminarLibro(${index})">Eliminar</button></td>
+          </tr>
+        `;
+        tbody.innerHTML += fila;
+      });
+    }
+
+    function mostrarLibrosCliente() {
+      let tbody = document.querySelector("#tablaLibrosCliente tbody");
+      tbody.innerHTML = "";
+      libros
+        .filter(libro => libro.estado === "disponible")
+        .forEach((libro, index) => {
+          let fila = `
+            <tr>
+              <td>${libro.titulo}</td>
+              <td>${libro.autor}</td>
+              <td class="${libro.estado}">${libro.estado}</td>
+              <td>
+                <button onclick="solicitarPrestamo(${index})">Solicitar Préstamo</button>
+                <button onclick="solicitarCompra(${index})">Comprar</button>
+              </td>
+            </tr>
+          `;
+          tbody.innerHTML += fila;
+        });
+    }
+
+    function solicitarPrestamo(index) {
+      libros[index].estado = "prestamo";
+      guardarLibros();
+      alert(`Solicitaste el préstamo de "${libros[index].titulo}"`);
+      mostrarLibrosCliente();
+    }
+
+    function solicitarCompra(index) {
+      libros[index].estado = "venta";
+      guardarLibros();
+      alert(`Compraste "${libros[index].titulo}"`);
+      mostrarLibrosCliente();
+    }
+
+    function eliminarLibro(index) {
+      libros.splice(index, 1);
+      guardarLibros();
+      mostrarLibrosAdmin();
+    }
+  </script>
+</body>
+</html>
+
