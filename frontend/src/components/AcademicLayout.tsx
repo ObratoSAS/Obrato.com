@@ -2,6 +2,8 @@ import { PropsWithChildren } from 'react'
 import { RefreshCcw } from 'lucide-react'
 import '../styles/layout.css'
 
+// Layout maestro que añade cabecera y contenedor principal.
+
 type AcademicLayoutProps = PropsWithChildren<{
   isLoading: boolean
   onRefresh: () => void

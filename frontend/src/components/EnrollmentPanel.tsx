@@ -5,6 +5,8 @@ import { api } from '../services/api'
 import { Course, CreateEnrollmentPayload, Enrollment, Student } from '../types'
 import '../styles/panel.css'
 
+// Panel responsable de gestionar las inscripciones de estudiantes en materias.
+
 interface EnrollmentPanelProps {
   student: Student | null
   students: Student[]
@@ -23,6 +25,7 @@ const initialEnrollment: CreateEnrollmentPayload = {
 export function EnrollmentPanel ({ student, students, courses, enrollments, onStudentChange, onInvalidate }: EnrollmentPanelProps): JSX.Element {
   const [form, setForm] = useState<CreateEnrollmentPayload>(initialEnrollment)
 
+  // Mutación que envía al backend la solicitud de inscripción.
   const createEnrollment = useMutation({
     mutationFn: async (payload: CreateEnrollmentPayload) => await api.post('/enrollments', payload),
     onSuccess: async () => {
@@ -32,16 +35,19 @@ export function EnrollmentPanel ({ student, students, courses, enrollments, onSt
     }
   })
 
+  // Se filtran las materias para que sólo aparezcan las del programa del estudiante seleccionado.
   const filteredCourses = useMemo(() => {
     if (!student) return courses
     return courses.filter(course => course.program.id === student.program.id)
   }, [courses, student])
 
+  // Las inscripciones mostradas corresponden exclusivamente al estudiante elegido.
   const studentEnrollments = useMemo(() => {
     if (!student) return []
     return enrollments.filter(enrollment => enrollment.student.id === student.id)
   }, [enrollments, student])
 
+  // Controla el envío del formulario respetando validaciones mínimas.
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (form.studentId === 0 || form.courseId === 0) return
@@ -96,6 +102,16 @@ export function EnrollmentPanel ({ student, students, courses, enrollments, onSt
                   <span>Nota: {enrollment.finalGrade ?? 'Pendiente'}</span>
                   <span>{dayjs(enrollment.createdAt).format('DD/MM/YYYY')}</span>
                 </div>
+                {enrollment.classmates.length > 0 && (
+                  <div>
+                    <strong>Comparte clase con:</strong>
+                    <ul className="card__companions">
+                      {enrollment.classmates.map(partner => (
+                        <li key={partner}>{partner}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             )) : <p>No hay inscripciones registradas para este estudiante.</p>}
           </div>

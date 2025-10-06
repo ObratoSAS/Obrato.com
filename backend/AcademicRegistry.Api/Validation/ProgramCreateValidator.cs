@@ -1,6 +1,8 @@
 using AcademicRegistry.Api.Data;
 using AcademicRegistry.Api.Dtos;
 
+// Valida el alta de programas para evitar duplicados y datos inválidos.
+
 namespace AcademicRegistry.Api.Validation;
 
 public class ProgramCreateValidator : IValidator<ProgramCreateDto>

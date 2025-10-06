@@ -1,6 +1,8 @@
 using AcademicRegistry.Api.Data;
 using AcademicRegistry.Api.Dtos;
 
+// Verifica que la inscripción respete los cupos y restricciones de créditos.
+
 namespace AcademicRegistry.Api.Validation;
 
 public class EnrollmentCreateValidator : IValidator<EnrollmentCreateDto>

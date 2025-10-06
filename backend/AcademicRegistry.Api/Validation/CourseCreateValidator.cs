@@ -1,6 +1,8 @@
 using AcademicRegistry.Api.Data;
 using AcademicRegistry.Api.Dtos;
 
+// Valida la creación de materias asegurando códigos únicos y créditos fijos.
+
 namespace AcademicRegistry.Api.Validation;
 
 public class CourseCreateValidator : IValidator<CourseCreateDto>
@@ -25,9 +27,9 @@ public class CourseCreateValidator : IValidator<CourseCreateDto>
             errors.Add("code", new List<string> { "Ya existe una materia con este código." });
         }
 
-        if (instance.Credits <= 0)
+        if (instance.Credits != 3)
         {
-            errors.Add("credits", new List<string> { "Los créditos deben ser mayores a cero." });
+            errors.Add("credits", new List<string> { "Cada materia debe tener exactamente 3 créditos." });
         }
 
         if (!_context.Programs.Any(p => p.Id == instance.ProgramId))
