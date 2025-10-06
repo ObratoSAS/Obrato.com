@@ -4,6 +4,8 @@ import { api } from '../services/api'
 import { CreateStudentPayload, Program, Student } from '../types'
 import '../styles/panel.css'
 
+// Panel dedicado a crear y seleccionar estudiantes.
+
 interface StudentPanelProps {
   students: Student[]
   programs: Program[]
@@ -22,6 +24,7 @@ const initialStudent: CreateStudentPayload = {
 export function StudentPanel ({ students, programs, onSelect, selectedStudentId, onInvalidate }: StudentPanelProps): JSX.Element {
   const [form, setForm] = useState<CreateStudentPayload>(initialStudent)
 
+  // Mutación para crear estudiantes respetando validaciones en el backend.
   const createStudent = useMutation({
     mutationFn: async (payload: CreateStudentPayload) => await api.post('/students', payload),
     onSuccess: async () => {
@@ -30,8 +33,10 @@ export function StudentPanel ({ students, programs, onSelect, selectedStudentId,
     }
   })
 
+  // Lista ordenada alfabéticamente para facilitar la búsqueda.
   const sortedStudents = useMemo(() => [...students].sort((a, b) => a.firstName.localeCompare(b.firstName)), [students])
 
+  // Maneja el envío del formulario de registro.
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!form.document.trim() || !form.firstName.trim() || !form.lastName.trim() || form.programId === 0) return

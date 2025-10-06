@@ -1,6 +1,8 @@
 using AcademicRegistry.Api.Data;
 using AcademicRegistry.Api.Dtos;
 
+// Validador encargado de garantizar documentos únicos y pertenencia a programas existentes.
+
 namespace AcademicRegistry.Api.Validation;
 
 public class StudentCreateValidator : IValidator<StudentCreateDto>

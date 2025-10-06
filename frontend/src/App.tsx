@@ -6,10 +6,13 @@ import { StudentPanel } from './components/StudentPanel'
 import { useAcademicData } from './hooks/useAcademicData'
 import './styles/app.css'
 
+// Componente raíz que orquesta los paneles principales del registro académico.
+
 function App (): JSX.Element {
   const { programs, courses, students, professors, enrollments, isLoading, refetchAll, invalidate } = useAcademicData()
   const [selectedStudentId, setSelectedStudentId] = useState<number | null>(null)
 
+  // Memoriza el estudiante seleccionado para mostrar sus inscripciones y compañeros.
   const selectedStudent = useMemo(() => students.data?.find(student => student.id === selectedStudentId) ?? null, [students.data, selectedStudentId])
 
   return (

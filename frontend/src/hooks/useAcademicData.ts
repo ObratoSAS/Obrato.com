@@ -8,9 +8,11 @@ interface AcademicResponse<T> {
   refetch: () => Promise<unknown>
 }
 
+// Hook centralizado que orquesta las consultas al backend.
 export function useAcademicData () {
   const queryClient = useQueryClient()
 
+  // Se ejecutan en paralelo todas las consultas necesarias para poblar la interfaz.
   const queries = useQueries({
     queries: [
       {
@@ -48,6 +50,7 @@ export function useAcademicData () {
     enrollments: queries[4] as AcademicResponse<Enrollment[]>,
     isLoading: queries.some(query => query.isLoading),
     refetchAll,
+    // Permite invalidar cachés de forma granular tras operaciones de escritura.
     invalidate: async (key: string[]) => await queryClient.invalidateQueries({ queryKey: key })
   }
 }

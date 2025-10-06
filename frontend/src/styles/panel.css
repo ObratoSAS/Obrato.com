@@ -104,6 +104,17 @@
   color: rgba(226, 232, 240, 0.6);
 }
 
+.card__companions {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: rgba(148, 163, 184, 0.95);
+}
+
 .card__list {
   list-style: none;
   margin: 0;

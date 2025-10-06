@@ -4,6 +4,8 @@ import { api } from '../services/api'
 import { CreateProgramPayload, Professor, Program } from '../types'
 import '../styles/panel.css'
 
+// Panel para visualizar y registrar programas académicos.
+
 interface ProgramPanelProps {
   programs: Program[]
   professors: Professor[]
@@ -19,6 +21,7 @@ const initialProgram: CreateProgramPayload = {
 export function ProgramPanel ({ programs, professors, onInvalidate }: ProgramPanelProps): JSX.Element {
   const [form, setForm] = useState<CreateProgramPayload>(initialProgram)
 
+  // Mutación encargada de enviar el formulario al backend.
   const createProgram = useMutation({
     mutationFn: async (payload: CreateProgramPayload) => await api.post('/programs', payload),
     onSuccess: async () => {
@@ -27,8 +30,10 @@ export function ProgramPanel ({ programs, professors, onInvalidate }: ProgramPan
     }
   })
 
+  // Suma los créditos requeridos como indicador informativo.
   const totalCredits = useMemo(() => programs.reduce((acc, program) => acc + program.requiredCredits, 0), [programs])
 
+  // Maneja el envío del formulario de creación.
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!form.name.trim()) return
