@@ -1,0 +1,22 @@
+{
+  "name": "@obrato/plugins",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsc --watch --project tsconfig.json",
+    "lint": "eslint --ext .ts src",
+    "test": "jest",
+    "format": "prettier --write 'src/**/*.ts'"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "typescript": "^5.3.3",
+    "ts-jest": "^29.1.1"
+  }
+}

@@ -1,0 +1,517 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String           @id @default(uuid())
+  email           String           @unique
+  passwordHash    String?
+  fullName        String
+  language        String           @default("es")
+  timezone        String           @default("UTC")
+  avatarUrl       String?
+  signature       String?
+  preferences     Json             @default(json('{}'))
+  lastLoginAt     DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  twoFactorSecret String?
+  refreshTokenHash String?
+  oauthProvider   String?
+  oauthId         String?
+  roles           UserRole[]
+  enrollments     Enrollment[]
+  courses         Course[]         @relation("CourseTeachers")
+  forumPosts      ForumPost[]
+  messagesSent    Message[]        @relation("MessageSender")
+  messagesReceived Message[]       @relation("MessageRecipient")
+  notifications   Notification[]
+  submissions     Submission[]
+  attempts        Attempt[]
+  auditLogs       AuditLog[]
+  badges          BadgeAward[]
+  payments        Payment[]
+}
+
+model Role {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  description String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  assignments UserRole[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String            @id @default(uuid())
+  action      String
+  resource    String
+  description String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  id           String      @id @default(uuid())
+  roleId       String
+  permissionId String
+  role         Role        @relation(fields: [roleId], references: [id])
+  permission   Permission  @relation(fields: [permissionId], references: [id])
+
+  @@unique([roleId, permissionId])
+}
+
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String
+  roleId    String
+  courseId  String?
+  user      User     @relation(fields: [userId], references: [id])
+  role      Role     @relation(fields: [roleId], references: [id])
+  course    Course?  @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
+  @@unique([userId, roleId, courseId])
+}
+
+model Organization {
+  id        String    @id @default(uuid())
+  name      String
+  code      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  cohorts   Cohort[]
+  courses   Course[]
+}
+
+model Cohort {
+  id             String        @id @default(uuid())
+  name           String
+  description    String?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  enrollments    Enrollment[]
+  createdAt      DateTime      @default(now())
+}
+
+model CourseCategory {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  parentId    String?
+  parent      CourseCategory? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    CourseCategory[] @relation("CategoryHierarchy")
+  courses     Course[]
+}
+
+model Course {
+  id             String           @id @default(uuid())
+  shortName      String           @unique
+  fullName       String
+  summary        String?
+  language       String           @default("es")
+  format         String           @default("topics")
+  visibility     String           @default("public")
+  startDate      DateTime?
+  endDate        DateTime?
+  enrollmentStart DateTime?
+  enrollmentEnd  DateTime?
+  categoryId     String?
+  organizationId String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  metadata       Json             @default(json('{}'))
+  category       CourseCategory?  @relation(fields: [categoryId], references: [id])
+  organization   Organization?    @relation(fields: [organizationId], references: [id])
+  sections       CourseSection[]
+  activities     Activity[]
+  enrollments    Enrollment[]
+  gradeItems     GradeItem[]
+  teachers       User[]           @relation("CourseTeachers")
+  competencies   CourseCompetency[]
+  events         Event[]
+  payments       Payment[]
+}
+
+model CourseSection {
+  id        String    @id @default(uuid())
+  name      String
+  summary   String?
+  order     Int       @default(0)
+  courseId  String
+  visible   Boolean   @default(true)
+  course    Course    @relation(fields: [courseId], references: [id])
+  activities Activity[]
+}
+
+model Activity {
+  id            String          @id @default(uuid())
+  type          String
+  title         String
+  description   String?
+  settings      Json             @default(json('{}'))
+  openAt        DateTime?
+  closeAt       DateTime?
+  sectionId     String?
+  courseId      String
+  gradingMethod String?         @default("none")
+  maxScore      Float?           @default(0)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  section       CourseSection?  @relation(fields: [sectionId], references: [id])
+  course        Course          @relation(fields: [courseId], references: [id])
+  submissions   Submission[]
+  attempts      Attempt[]
+  gradeItems    GradeItem[]     @relation("ActivityGradeItem")
+  resources     Resource[]
+  forum         Forum?
+}
+
+model Resource {
+  id          String   @id @default(uuid())
+  activityId  String?
+  type        String
+  title       String
+  url         String?
+  fileId      String?
+  metadata    Json     @default(json('{}'))
+  activity    Activity? @relation(fields: [activityId], references: [id])
+  file        StorageObject? @relation(fields: [fileId], references: [id])
+}
+
+model Enrollment {
+  id             String      @id @default(uuid())
+  userId         String
+  courseId       String
+  cohortId       String?
+  methodId       String?
+  status         String      @default("active")
+  enrolledAt     DateTime    @default(now())
+  lastAccessAt   DateTime?
+  completionDate DateTime?
+  metadata       Json        @default(json('{}'))
+  user           User        @relation(fields: [userId], references: [id])
+  course         Course      @relation(fields: [courseId], references: [id])
+  cohort         Cohort?     @relation(fields: [cohortId], references: [id])
+  method         EnrollmentMethod? @relation(fields: [methodId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model EnrollmentMethod {
+  id          String        @id @default(uuid())
+  type        String
+  name        String
+  config      Json          @default(json('{}'))
+  courseId    String?
+  course      Course?       @relation(fields: [courseId], references: [id])
+  enrollments Enrollment[]
+}
+
+model GradeScale {
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  scaleType   String       @default("numeric")
+  metadata    Json         @default(json('{}'))
+  courseId    String?
+  course      Course?      @relation(fields: [courseId], references: [id])
+  items       GradeItem[]
+}
+
+model GradeItem {
+  id          String   @id @default(uuid())
+  courseId    String
+  activityId  String?
+  scaleId     String?
+  name        String
+  maxScore    Float    @default(100)
+  weight      Float    @default(1)
+  position    Int      @default(0)
+  course      Course   @relation(fields: [courseId], references: [id])
+  activity    Activity? @relation("ActivityGradeItem", fields: [activityId], references: [id])
+  scale       GradeScale? @relation(fields: [scaleId], references: [id])
+  grades      GradeEntry[]
+}
+
+model GradeEntry {
+  id         String    @id @default(uuid())
+  gradeItemId String
+  userId     String
+  score      Float?
+  feedback   String?
+  gradedAt   DateTime? @default(now())
+  graderId   String?
+  gradeItem  GradeItem @relation(fields: [gradeItemId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+  grader     User?     @relation("GradeGrader", fields: [graderId], references: [id])
+
+  @@unique([gradeItemId, userId])
+}
+
+model QuestionBank {
+  id        String      @id @default(uuid())
+  name      String
+  courseId  String?
+  ownerId   String
+  metadata  Json        @default(json('{}'))
+  createdAt DateTime    @default(now())
+  questions Question[]
+  course    Course?     @relation(fields: [courseId], references: [id])
+  owner     User        @relation(fields: [ownerId], references: [id])
+}
+
+model Question {
+  id            String         @id @default(uuid())
+  bankId        String
+  type          String
+  text          String
+  options       Json           @default(json('[]'))
+  answer        Json           @default(json('{}'))
+  feedback      Json           @default(json('{}'))
+  difficulty    Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  bank          QuestionBank   @relation(fields: [bankId], references: [id])
+  attempts      Attempt[]
+}
+
+model Attempt {
+  id           String    @id @default(uuid())
+  activityId   String
+  userId       String
+  questionId   String?
+  responses    Json      @default(json('{}'))
+  score        Float?
+  startedAt    DateTime  @default(now())
+  completedAt  DateTime?
+  activity     Activity  @relation(fields: [activityId], references: [id])
+  user         User      @relation(fields: [userId], references: [id])
+  question     Question? @relation(fields: [questionId], references: [id])
+}
+
+model Submission {
+  id          String    @id @default(uuid())
+  activityId  String
+  userId      String
+  status      String    @default("draft")
+  content     Json      @default(json('{}'))
+  submittedAt DateTime?
+  gradedAt    DateTime?
+  grade       Float?
+  feedback    String?
+  activity    Activity  @relation(fields: [activityId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+}
+
+model Forum {
+  id         String     @id @default(uuid())
+  activityId String?
+  title      String
+  type       String     @default("general")
+  activity   Activity?  @relation(fields: [activityId], references: [id])
+  posts      ForumPost[]
+}
+
+model ForumPost {
+  id         String     @id @default(uuid())
+  forumId    String
+  userId     String
+  parentId   String?
+  content    String
+  metadata   Json       @default(json('{}'))
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  forum      Forum      @relation(fields: [forumId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+  parent     ForumPost? @relation("ForumPostHierarchy", fields: [parentId], references: [id])
+  replies    ForumPost[] @relation("ForumPostHierarchy")
+}
+
+model Message {
+  id           String   @id @default(uuid())
+  senderId     String
+  recipientId  String
+  content      String
+  metadata     Json     @default(json('{}'))
+  readAt       DateTime?
+  createdAt    DateTime @default(now())
+  sender       User     @relation("MessageSender", fields: [senderId], references: [id])
+  recipient    User     @relation("MessageRecipient", fields: [recipientId], references: [id])
+}
+
+model Notification {
+  id         String   @id @default(uuid())
+  userId     String
+  type       String
+  payload    Json     @default(json('{}'))
+  readAt     DateTime?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model Event {
+  id         String   @id @default(uuid())
+  courseId   String?
+  userId     String?
+  title      String
+  description String?
+  startAt    DateTime
+  endAt      DateTime?
+  type       String   @default("course")
+  course     Course?  @relation(fields: [courseId], references: [id])
+  user       User?    @relation(fields: [userId], references: [id])
+}
+
+model Competency {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  scale       String    @default("basic")
+  createdAt   DateTime  @default(now())
+  plans       LearningPlanCompetency[]
+  courses     CourseCompetency[]
+}
+
+model LearningPlan {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  owner       User      @relation(fields: [ownerId], references: [id])
+  competencies LearningPlanCompetency[]
+}
+
+model LearningPlanCompetency {
+  id             String      @id @default(uuid())
+  planId         String
+  competencyId   String
+  targetLevel    String      @default("achieved")
+  plan           LearningPlan @relation(fields: [planId], references: [id])
+  competency     Competency   @relation(fields: [competencyId], references: [id])
+}
+
+model CourseCompetency {
+  id           String    @id @default(uuid())
+  courseId     String
+  competencyId String
+  course       Course    @relation(fields: [courseId], references: [id])
+  competency   Competency @relation(fields: [competencyId], references: [id])
+}
+
+model Badge {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  criteria    Json      @default(json('{}'))
+  imageUrl    String?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  awards      BadgeAward[]
+}
+
+model BadgeAward {
+  id        String   @id @default(uuid())
+  badgeId   String
+  userId    String
+  awardedAt DateTime @default(now())
+  issuerId  String?
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  issuer    User?    @relation(fields: [issuerId], references: [id])
+
+  @@unique([badgeId, userId])
+}
+
+model StorageObject {
+  id          String   @id @default(uuid())
+  bucket      String
+  key         String
+  size        Int
+  mimeType    String
+  checksum    String
+  createdAt   DateTime @default(now())
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  files       File[]
+  resources   Resource[]
+}
+
+model File {
+  id          String   @id @default(uuid())
+  storageId   String
+  filename    String
+  description String?
+  metadata    Json     @default(json('{}'))
+  storage     StorageObject @relation(fields: [storageId], references: [id])
+  submissions Submission[]
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  event      String
+  payload    Json     @default(json('{}'))
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+}
+
+model Payment {
+  id           String   @id @default(uuid())
+  userId       String
+  courseId     String
+  provider     String
+  providerRef  String
+  amount       Float
+  currency     String @default("USD")
+  status       String @default("pending")
+  metadata     Json    @default(json('{}'))
+  createdAt    DateTime @default(now())
+  user         User    @relation(fields: [userId], references: [id])
+  course       Course  @relation(fields: [courseId], references: [id])
+}
+
+model Plugin {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  name        String
+  version     String
+  type        String
+  enabled     Boolean  @default(true)
+  manifest    Json     @default(json('{}'))
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  settings    Json     @default(json('{}'))
+}
+
+model ReportSchedule {
+  id          String   @id @default(uuid())
+  name        String
+  type        String
+  config      Json     @default(json('{}'))
+  ownerId     String
+  createdAt   DateTime @default(now())
+  owner       User     @relation(fields: [ownerId], references: [id])
+}
+
+model BackupJob {
+  id          String   @id @default(uuid())
+  type        String
+  status      String   @default("pending")
+  executedAt  DateTime @default(now())
+  payload     Json     @default(json('{}'))
+  operatorId  String?
+  operator    User?    @relation(fields: [operatorId], references: [id])
+}
+

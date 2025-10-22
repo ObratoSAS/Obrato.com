@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "commonjs",
+    "lib": ["ES2021"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@obrato/ui": ["packages/ui/src"],
+      "@obrato/lib": ["packages/lib/src"],
+      "@obrato/plugins": ["packages/plugins/src"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "build"]
+}
