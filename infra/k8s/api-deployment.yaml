@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: obrato-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: obrato-api
+  template:
+    metadata:
+      labels:
+        app: obrato-api
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/obrato/api:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: obrato-api-env
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: obrato-api
+spec:
+  selector:
+    app: obrato-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000

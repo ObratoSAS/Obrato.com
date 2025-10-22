@@ -1,0 +1,30 @@
+{
+  "name": "obrato-lms",
+  "private": true,
+  "packageManager": "pnpm@8.15.0",
+  "scripts": {
+    "dev": "pnpm --recursive --parallel run dev",
+    "build": "pnpm --recursive run build",
+    "lint": "pnpm --recursive run lint",
+    "test": "pnpm --recursive run test",
+    "format": "pnpm --recursive run format",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.6.1",
+    "@commitlint/config-conventional": "^18.6.2",
+    "husky": "^9.0.7",
+    "lint-staged": "^15.2.2",
+    "pnpm": "^8.15.0",
+    "turbo": "^1.11.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "pnpm lint",
+      "pnpm format"
+    ],
+    "*.{json,md,yaml,yml}": [
+      "pnpm format"
+    ]
+  }
+}
